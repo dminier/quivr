@@ -40,6 +40,7 @@ class DefaultModelSuppliers(str, Enum):
     META = "meta"
     MISTRAL = "mistral"
     GROQ = "groq"
+    AZURE_APIM = "azure-apim"
 
 
 class LLMConfig(QuivrBaseConfig):
@@ -64,6 +65,24 @@ class LLMModelConfig:
                 context=8191, tokenizer_hub="Xenova/text-embedding-ada-002"
             ),
             "text-embedding-ada-002": LLMConfig(
+                context=8191, tokenizer_hub="Xenova/text-embedding-ada-002"
+            ),
+        },
+        DefaultModelSuppliers.AZURE_APIM: {
+            "azure-apim-gpt-4o": LLMConfig(context=128000, tokenizer_hub="Xenova/gpt-4o"),
+            "azure-apim-gpt-4o-mini": LLMConfig(context=128000, tokenizer_hub="Xenova/gpt-4o"),
+            "azure-apim-gpt-4-turbo": LLMConfig(context=128000, tokenizer_hub="Xenova/gpt-4"),
+            "azure-apim-gpt-4": LLMConfig(context=8192, tokenizer_hub="Xenova/gpt-4"),
+            "azure-apim-gpt-3.5-turbo": LLMConfig(
+                context=16385, tokenizer_hub="Xenova/gpt-3.5-turbo"
+            ),
+            "azure-apim-text-embedding-3-large": LLMConfig(
+                context=8191, tokenizer_hub="Xenova/text-embedding-ada-002"
+            ),
+            "azure-apim-text-embedding-3-small": LLMConfig(
+                context=8191, tokenizer_hub="Xenova/text-embedding-ada-002"
+            ),
+            "azure-apim-text-embedding-ada-002": LLMConfig(
                 context=8191, tokenizer_hub="Xenova/text-embedding-ada-002"
             ),
         },
@@ -171,6 +190,10 @@ class LLMEndpointConfig(QuivrBaseConfig):
     temperature: float = 0.7
     streaming: bool = True
     prompt: CustomPromptsModel | None = None
+    # feature/azure-apim
+    deployment: str | None = None
+    api_version: str | None = None
+    default_query: Dict[str, str] = {}
 
     _FALLBACK_TOKENIZER = "cl100k_base"
 

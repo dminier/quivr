@@ -1,4 +1,6 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Column
+from typing import Dict
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class Model(SQLModel, table=True):  # type: ignore
@@ -14,6 +16,13 @@ class Model(SQLModel, table=True):  # type: ignore
     endpoint_url: str = Field(default="")
     env_variable_name: str = Field(default="")
     default: bool = Field(default=False)
+    # feature/azure-apim
+    deployment: str = Field(default="")
+    api_version: str = Field(default="")
+    default_query: Dict | None = Field(
+        default=None,
+        sa_column=Column(JSONB)
+    )
 
     class Config:
         arbitrary_types_allowed = True

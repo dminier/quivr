@@ -117,6 +117,10 @@ class RAGService:
                 temperature=(LLMEndpointConfig.model_fields["temperature"].default),
                 max_input_tokens=model.max_input,
                 max_output_tokens=model.max_output,
+                # feature/azure-apim
+                deployment=model.deployment,
+                api_version=model.api_version,
+                default_query=model.default_query,
             ),
             prompt=self.prompt.content if self.prompt else None,
         )

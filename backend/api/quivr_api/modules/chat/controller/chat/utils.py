@@ -45,6 +45,10 @@ def load_and_merge_retrieval_configuration(
     field_mapping = {
         "env_variable_name": "env_variable_name",
         "endpoint_url": "llm_base_url",
+        # feature/azure-apim
+        "deployment": "deployment",
+        "api_version": "api_version",
+        "default_query": "default_query",
     }
 
     retrieval_config.llm_config.set_from_sqlmodel(

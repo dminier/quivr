@@ -71,6 +71,18 @@ class LLMEndpoint:
                     azure_endpoint=azure_endpoint,
                     max_tokens=config.max_output_tokens,
                 )
+            elif config.supplier == DefaultModelSuppliers.AZURE_APIM:
+                _llm = AzureChatOpenAI(
+                    azure_deployment=config.deployment,
+                    api_version=config.api_version,
+                    azure_endpoint=config.llm_base_url,
+                    default_headers={
+                        "Ocp-Apim-Subscription-Key":  config.llm_api_key
+                    },
+                    default_query=config.default_query,
+                    max_tokens=config.max_output_tokens,
+                )
+
             elif config.supplier == DefaultModelSuppliers.ANTHROPIC:
                 _llm = ChatAnthropic(
                     model_name=config.model,
