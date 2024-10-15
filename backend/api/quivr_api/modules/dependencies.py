@@ -140,6 +140,17 @@ def get_embedding_client() -> Embeddings:
             azure_endpoint=netloc,
             api_version=api_version,
         )
+    elif settings.azure_apim_openai_embeddings_endpoint:
+        logger.debug(f"Using Azure APIM OpenAI embeddings")
+        embeddings = AzureOpenAIEmbeddings(
+            azure_deployment=settings.azure_apim_openai_embeddings_deployment,
+            azure_endpoint=settings.azure_apim_openai_embeddings_endpoint,
+            api_version=settings.azure_apim_openai_embeddings_api_version,
+            default_headers={
+                "Ocp-Apim-Subscription-Key": settings.azure_apim_openai_embeddings_api_key
+            },
+            default_query=settings.azure_apim_openai_embeddings_default_query,
+        )
     else:
         embeddings = OpenAIEmbeddings()  # pyright: ignore reportPrivateUsage=none
     return embeddings

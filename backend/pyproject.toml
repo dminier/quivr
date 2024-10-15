@@ -9,7 +9,7 @@ authors = [
     { name = "Jacopo Chevallard", email = "jacopo@quivr.app" },
 ]
 dependencies = [
-    "packaging>=22.0",
+    "packaging>=23.2",
     # Logging packages
     "structlog>=24.4.0",
     "python-json-logger>=2.0.7",
@@ -51,6 +51,13 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/backend"]
+
+# Use the unsafe-best-match to solve the issue with "packaging" conflicting :
+#      hint: `packaging` was found on https://download.pytorch.org/whl/cpu, but not at the requested version (packaging>=23.2,<25). A compatible version may be available on a subsequent index (e.g., ...). By default, uv
+#      will only consider versions that are published on the first index that contains a given package, to avoid dependency confusion attacks. If all indexes are equally trusted, use `--index-strategy unsafe-best-match` to consider all versions from all indexes, regardless of the
+#      order in which they were defined.
+[tool.uv]
+index-strategy = "unsafe-best-match"
 
 [[tool.rye.sources]]
 name = "pytorch"

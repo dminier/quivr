@@ -2,6 +2,7 @@ from uuid import UUID
 
 from posthog import Posthog
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import model_validator, ValidationError
 
 
 class BrainRateLimiting(BaseSettings):
@@ -105,6 +106,11 @@ class BrainSettings(BaseSettings):
     model_config = SettingsConfigDict(validate_default=False)
     openai_api_key: str = ""
     azure_openai_embeddings_url: str = ""
+    azure_apim_openai_embeddings_endpoint: str = ""
+    azure_apim_openai_embeddings_deployment: str = ""
+    azure_apim_openai_embeddings_api_version: str = ""
+    azure_apim_openai_embeddings_api_key: str = ""
+    azure_apim_openai_embeddings_default_query: dict = {}
     supabase_url: str = ""
     supabase_service_key: str = ""
     resend_api_key: str = "null"
@@ -115,6 +121,19 @@ class BrainSettings(BaseSettings):
     pg_database_url: str
     pg_database_async_url: str
     embedding_dim: int = 1536
+
+    @model_validator(mode='after')
+    def check_azure_apim_openai_embeddings_config(self):
+        if self.azure_apim_openai_embeddings_endpoint and (
+            not self.azure_apim_openai_embeddings_deployment
+            or not self.azure_apim_openai_embeddings_api_version
+            or not self.azure_apim_openai_embeddings_api_key
+        ):
+            raise ValueError(
+                "The environment variables 'AZURE_APIM_OPENAI_EMBEDDINGS_DEPLOYMENT' and 'AZURE_APIM_OPENAI_EMBEDDINGS_API_KEY' and 'AZURE_APIM_OPENAI_EMBEDDINGS_API_VERSION "
+                "are required when 'AZURE_APIM_OPENAI_EMBEDDINGS_ENDPOINT' is defined."
+            )
+        return self
 
 
 class ResendSettings(BaseSettings):
