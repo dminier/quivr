@@ -1,1 +1,1 @@
-alter table "public"."model" add column  "deployment" text, add column  "api_version" text, add column  "default_query" jsonb;
+alter table "public"."models" add column  "deployment" text, add column  "api_version" text, add column  "default_query" jsonb;
